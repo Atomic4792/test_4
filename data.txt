@@ -1,0 +1,25 @@
+MOV N 50
+PRINT 2
+MOV A 3
+begin:
+MOV B 2
+MOV Z 0
+test:
+MOV C B
+new:
+IF C == A JUMP error
+IF C > A JUMP over
+ADD C B
+JUMP new
+error:
+MOV Z 1
+JUMP over2
+over:
+ADD B 1
+IF B < A JUMP test
+over2:
+IF Z == 1 JUMP over3
+PRINT A
+over3:
+ADD A 1
+IF A <= N JUMP begin
