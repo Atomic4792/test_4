@@ -1,4 +1,5 @@
 from string import ascii_uppercase
+from utils import DataSource, TextDataSource,JsonDataSource
 
 def conditional(operand_1: int, operator: str, operand_2: int) -> bool:
     if "==" in operator:
@@ -19,7 +20,8 @@ def value(x: int, data: dict) -> int:
         return data[x]
     return int(x)
 
-def run(commands: dict) -> list:
+def run(raw_data: DataSource) -> list:
+    commands = raw_data.parse_file()
     print_list = []
     characters = ascii_uppercase
     data = {i: 0 for i in ascii_uppercase}
@@ -47,4 +49,7 @@ def run(commands: dict) -> list:
             break
         row += 1
     return print_list
-        
+
+if __name__ == "__main__":
+    raw_data = JsonDataSource("data.json")
+    print(run(raw_data))

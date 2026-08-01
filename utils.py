@@ -1,5 +1,5 @@
+import json
 from abc import ABC, abstractmethod
-
 
 class DataSource(ABC):
     @abstractmethod
@@ -19,4 +19,18 @@ class TextDataSource(DataSource):
             for line in file:
                 line = line.strip()
                 data.append(line)
+        return data
+
+class JsonDataSource(DataSource):
+    def __init__(self, file_name: str):
+        super().__init__()
+        self.file_name = file_name
+
+    def parse_file(self) -> list:
+        data = []
+        with open(self.file_name, "r") as file:
+            file = json.load(file)
+            for value in file.values():
+                data.append(value)
+
         return data
