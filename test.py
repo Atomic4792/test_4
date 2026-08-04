@@ -1,5 +1,14 @@
 from string import ascii_uppercase
 
+def json_parser(file_name: txt) -> list:
+    data = []
+    with open(file_name, "r") as file:
+        file = json.load(file)
+        for value in file.values():
+            data.append(value)
+
+    return data
+
 def conditional(operand_1: int, operator: str, operand_2: int) -> bool:
     if "==" in operator:
         return operand_1 == operand_2
@@ -47,4 +56,3 @@ def run(commands: dict) -> list:
             break
         row += 1
     return print_list
-        

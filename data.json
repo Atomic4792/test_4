@@ -1,0 +1,28 @@
+{
+    "1": "MOV N 50",
+    "2": "PRINT 2",
+    "3": "MOV A 3",
+    "4": "begin:",
+    "5": "MOV B 2",
+    "6": "MOV Z 0",
+    "7": "test:",
+    "8": "MOV C B",
+    "9": "new:",
+    "10": "IF C == A JUMP error",
+    "11": "IF C > A JUMP over",
+    "12": "ADD C B",
+    "13": "JUMP new",
+    "14": "error:",
+    "15": "MOV Z 1",
+    "16": "JUMP over2",
+    "17": "over:",
+    "18": "ADD B 1",
+    "19": "IF B < A JUMP test",
+    "20": "over2:",
+    "21": "IF Z == 1 JUMP over3",
+    "22": "PRINT A",
+    "23": "over3:",
+    "24": "ADD A 1",
+    "25": "IF A <= N JUMP begin"
+
+}
