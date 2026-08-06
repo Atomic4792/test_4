@@ -1,5 +1,7 @@
+import os
+from dotenv import load_dotenv
 from string import ascii_uppercase
-from utils import DataSource, TextDataSource, JsonDataSource
+from utils import DataSource, TextDataSource,JsonDataSource, APIDataSource
 
 
 def conditional(operand_1: int, operator: str, operand_2: int) -> bool:
@@ -74,5 +76,6 @@ def run(raw_data: DataSource) -> list:
 
 
 if __name__ == "__main__":
-    raw_data = JsonDataSource("data.json")
+    load_dotenv()
+    raw_data = APIDataSource(os.getenv("ENDPOINT_URL"))
     print(run(raw_data))

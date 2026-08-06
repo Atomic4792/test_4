@@ -1,4 +1,7 @@
 import json
+import os
+import requests
+from dotenv import load_dotenv
 from abc import ABC, abstractmethod
 
 
@@ -57,5 +60,22 @@ class JsonDataSource(DataSource):
             file = json.load(file)
             for value in file.values():
                 data.append(value)
+
+        return data
+
+
+class APIDataSource(DataSource):
+    def __init__(self, file_name: str):
+        super().__init__()
+        self.file_name = file_name
+        load_dotenv()
+
+    def parse_file(self) -> list:
+        data = []
+        headers = {"Authorization": f"Bearer {os.getenv("BEARER_TOKEN")}"}
+        r = requests.get(self.file_name, headers= headers)
+        response_obj = json.loads(r.text)
+        for value in response_obj.values():
+            data.append(value)
 
         return data
