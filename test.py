@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from string import ascii_uppercase
 from utils import DataSource, TextDataSource,JsonDataSource, APIDataSource
+from interface import add_cmd_ui, lookup_cmd_file
 
 
 def conditional(operand_1: int, operator: str, operand_2: int) -> bool:
@@ -74,8 +75,26 @@ def run(raw_data: DataSource) -> list:
 
     return print_list
 
+def main():
+    commands = {}
+    while True:
+        main_options = int(input("1. Add new cmd set 2.Perform actions with existing cmd set 3.exit: "))
+        try:
+            if main_options == 1:
+                is_command_added = add_cmd_ui()
+                if is_command_added:
+                    file_name, commands = is_command_added
+                    data_source = JsonDataSource(file_name)
+                    data_source.serialize_file(commands)
+                else:
+                    break
+            elif main_options == 2:
+                return
+            else:
+                break
+        except Exception as e:
+            print(f"main: {type(e).__name__}: {e}")
+
 
 if __name__ == "__main__":
-    load_dotenv()
-    raw_data = APIDataSource(os.getenv("ENDPOINT_URL"))
-    print(run(raw_data))
+    main()

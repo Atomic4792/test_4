@@ -1,0 +1,36 @@
+def add_cmd_ui() -> tuple | None:
+    commands = {}
+    cmd_counter = 0
+    while True:
+        command = input("Enter command or type 'wq' to go back: ")
+        if command.lower() != "wq":
+            cmd_counter += 1
+            commands[cmd_counter] = command
+        else:
+            break
+    if commands:
+        file_name = input("please enter file name to save commands: ")
+        return (file_name, commands)
+    else:
+        return None
+    
+def lookup_cmd_file(existing_files: dict) -> str | None:
+    while True:
+        file_name = input("Enter file name or 'wq' to go back: ").lower()
+        if file_name != 'wq':
+            if file_name in existing_files:
+                cmd_counter = 1
+                for cmd in existing_files[file_name]:
+                    print(f"{cmd_counter}. {cmd}")
+                    cmd_counter += 1
+                return file_name
+            continue
+        return None
+                    
+    
+
+
+
+        
+
+        

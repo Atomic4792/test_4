@@ -3,6 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 
 class DataSource(ABC):
@@ -62,6 +63,16 @@ class JsonDataSource(DataSource):
                 data.append(value)
 
         return data
+        
+    def serialize_file(self, commands: dict) -> bool:
+        try:
+            with open(self.file_name, "w") as file:
+                json.dump(commands, file)
+                return True
+        except:
+            print("serialize_file: Something went wrong")
+            return False
+
 
 
 class APIDataSource(DataSource):
@@ -72,10 +83,16 @@ class APIDataSource(DataSource):
 
     def parse_file(self) -> list:
         data = []
-        headers = {"Authorization": f"Bearer {os.getenv("BEARER_TOKEN")}"}
+        headers = {"Authorization": f"Bearer {os.getenv('BEARER_TOKEN')}"}
         r = requests.get(self.file_name, headers= headers)
         response_obj = json.loads(r.text)
         for value in response_obj.values():
             data.append(value)
 
         return data
+
+def get_files() -> dict:
+    script_dir = Path(__file__).resolve().parent
+    
+    
+
