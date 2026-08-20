@@ -15,13 +15,15 @@ def add_cmd_ui() -> tuple | None:
         return None
     
 def lookup_cmd_file(existing_files: dict) -> str | None:
+    print("\n\n")
+    for index, existing_file_name in enumerate(list(existing_files.keys())):
+        print(f"{index +1}. {existing_file_name}\n\n")
     while True:
         file_name = input("Enter file name or 'wq' to go back: ").lower()
         if file_name != 'wq':
             if file_name in existing_files:
-                cmd_counter = 1
-                for cmd in existing_files[file_name]:
-                    print(f"{cmd_counter}. {cmd}")
+                for index, cmd in enumerate(existing_files[file_name]):
+                    print(f"{index +1}. {cmd}")
                     cmd_counter += 1
                 return file_name
             continue
