@@ -30,9 +30,8 @@ def lookup_cmd_file(existing_files: dict) -> str | None:
         return None
                     
     
-
-
-
-        
-
-        
+def command_ouput(cmd_result:list, selected_file: str) -> None:
+def command_ouput(cmd_result:list, selected_file: str) -> None:
+    print("\n\n")
+    print(f"Selected file: {selected_file}")
+    print(f"Result: {cmd_result}")

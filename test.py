@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
 from string import ascii_uppercase
-from utils import DataSource, TextDataSource,JsonDataSource, APIDataSource
-from interface import add_cmd_ui, lookup_cmd_file
+from utils import DataSource, TextDataSource,JsonDataSource, APIDataSource, get_file_names
+from interface import add_cmd_ui, lookup_cmd_file, command_ouput
 
 
 def conditional(operand_1: int, operator: str, operand_2: int) -> bool:
@@ -42,7 +42,7 @@ def run(raw_data: DataSource) -> list:
     """
     commands = raw_data.parse_file()
     print_list = []
-    characters = ascii_uppercase
+    #characters = ascii_uppercase
     data = {i: 0 for i in ascii_uppercase}
     row = 0
 
@@ -87,9 +87,21 @@ def main():
                     data_source = JsonDataSource(file_name)
                     data_source.serialize_file(commands)
                 else:
-                    break
+                    break 
             elif main_options == 2:
-                return
+                file_data = {}
+                json_file_names = get_file_names()
+                for file_name in json_file_names:
+                    json_obj = JsonDataSource(file_name)
+                    file_content = json_obj.parse_file()
+                    file_data[file_name] = file_content
+                selected_file = lookup_cmd_file(file_data)
+                if selected_file:
+                    #this is redundant; there an object with file data already.
+                    #must refactor run()
+                    result_file = JsonDataSource(selected_file)
+                    result_set = run(result_file)
+                    command_ouput(result_set, selected_file)
             else:
                 break
         except Exception as e:

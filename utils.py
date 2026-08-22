@@ -91,8 +91,9 @@ class APIDataSource(DataSource):
 
         return data
 
-def get_files() -> dict:
+def get_file_names() -> list:
     script_dir = Path(__file__).resolve().parent
-    
-    
+    json_files = list(script_dir.glob("*.json"))
+    json_names = [f.name for f in json_files]
+    return json_names
 
