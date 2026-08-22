@@ -25,7 +25,6 @@ def lookup_cmd_file(existing_files: dict) -> str | None:
             if file_name in existing_files:
                 for index, cmd in enumerate(existing_files[file_name]):
                     print(f"{index +1}. {cmd}")
-                    cmd_counter += 1
                 return file_name
             continue
         return None
