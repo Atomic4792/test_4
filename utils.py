@@ -1,6 +1,7 @@
 import json
 import os
 import requests
+from datetime import datetime
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -72,6 +73,11 @@ class JsonDataSource(DataSource):
         except:
             print("serialize_file: Something went wrong")
             return False
+        
+    def get_creation_date(self) -> str:
+        created_ts = os.path.getctime(self.file_name)
+        created_dt = datetime.fromtimestamp(created_ts)
+        return created_dt.strftime("%d/%m/%Y %H:%M")
 
 
 

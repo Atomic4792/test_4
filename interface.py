@@ -16,21 +16,21 @@ def add_cmd_ui() -> tuple | None:
     
 def lookup_cmd_file(existing_files: dict) -> str | None:
     print("\n\n")
-    for index, existing_file_name in enumerate(list(existing_files.keys())):
-        print(f"{index +1}. {existing_file_name}")
+    print(f"{'File Name':<20}Created On")
+    for existing_file_name in existing_files:
+        print(f"{existing_file_name:<20}{existing_files[existing_file_name]['created_on']}")
     while True:
         print("\n\n")
         file_name = input("Enter file name or 'wq' to go back: ").lower()
         if file_name != 'wq':
             if file_name in existing_files:
-                for index, cmd in enumerate(existing_files[file_name]):
+                for index, cmd in enumerate(existing_files[file_name]["file_content"]):
                     print(f"{index +1}. {cmd}")
                 return file_name
             continue
         return None
                     
     
-def command_ouput(cmd_result:list, selected_file: str) -> None:
 def command_ouput(cmd_result:list, selected_file: str) -> None:
     print("\n\n")
     print(f"Selected file: {selected_file}")
