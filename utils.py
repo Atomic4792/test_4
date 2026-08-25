@@ -1,8 +1,10 @@
 import json
 import os
 import requests
+from datetime import datetime
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
+from pathlib import Path
 
 
 class DataSource(ABC):
@@ -62,6 +64,21 @@ class JsonDataSource(DataSource):
                 data.append(value)
 
         return data
+        
+    def serialize_file(self, commands: dict) -> bool:
+        try:
+            with open(self.file_name, "w") as file:
+                json.dump(commands, file)
+                return True
+        except:
+            print("serialize_file: Something went wrong")
+            return False
+        
+    def get_creation_date(self) -> str:
+        created_ts = os.path.getctime(self.file_name)
+        created_dt = datetime.fromtimestamp(created_ts)
+        return created_dt.strftime("%d/%m/%Y %H:%M")
+
 
 
 class APIDataSource(DataSource):
@@ -72,10 +89,17 @@ class APIDataSource(DataSource):
 
     def parse_file(self) -> list:
         data = []
-        headers = {"Authorization": f"Bearer {os.getenv("BEARER_TOKEN")}"}
+        headers = {"Authorization": f"Bearer {os.getenv('BEARER_TOKEN')}"}
         r = requests.get(self.file_name, headers= headers)
         response_obj = json.loads(r.text)
         for value in response_obj.values():
             data.append(value)
 
         return data
+
+def get_file_names() -> list:
+    script_dir = Path(__file__).resolve().parent
+    json_files = list(script_dir.glob("*.json"))
+    json_names = [f.name for f in json_files]
+    return json_names
+

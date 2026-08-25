@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
 from string import ascii_uppercase
-from utils import DataSource, TextDataSource,JsonDataSource, APIDataSource
+from utils import DataSource, TextDataSource,JsonDataSource, APIDataSource, get_file_names
+from interface import add_cmd_ui, lookup_cmd_file, command_ouput
 
 
 def conditional(operand_1: int, operator: str, operand_2: int) -> bool:
@@ -41,7 +42,7 @@ def run(raw_data: DataSource) -> list:
     """
     commands = raw_data.parse_file()
     print_list = []
-    characters = ascii_uppercase
+    #characters = ascii_uppercase
     data = {i: 0 for i in ascii_uppercase}
     row = 0
 
@@ -74,8 +75,38 @@ def run(raw_data: DataSource) -> list:
 
     return print_list
 
+def main():
+    commands = {}
+    while True:
+        main_options = int(input("1. Add new cmd set 2.Perform actions with existing cmd set 3.exit: "))
+        try:
+            if main_options == 1:
+                is_command_added = add_cmd_ui()
+                if is_command_added:
+                    file_name, commands = is_command_added
+                    data_source = JsonDataSource(file_name)
+                    data_source.serialize_file(commands)
+                else:
+                    break 
+            elif main_options == 2:
+                file_data = {}
+                json_file_names = get_file_names()
+                for file_name in json_file_names:
+                    json_obj = JsonDataSource(file_name)
+                    file_content = json_obj.parse_file()
+                    file_data[file_name] = {"file_content" : file_content, "created_on": json_obj.get_creation_date()}
+                selected_file = lookup_cmd_file(file_data)
+                if selected_file:
+                    #this is redundant; there an object with file data already.
+                    #must refactor run()
+                    result_file = JsonDataSource(selected_file)
+                    result_set = run(result_file)
+                    command_ouput(result_set, selected_file)
+            else:
+                break
+        except Exception as e:
+            print(f"main: {type(e).__name__}: {e}")
+
 
 if __name__ == "__main__":
-    load_dotenv()
-    raw_data = APIDataSource(os.getenv("ENDPOINT_URL"))
-    print(run(raw_data))
+    main()
