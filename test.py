@@ -94,7 +94,7 @@ def main():
                 for file_name in json_file_names:
                     json_obj = JsonDataSource(file_name)
                     file_content = json_obj.parse_file()
-                    file_data[file_name] = file_content
+                    file_data[file_name] = {"file_content" : file_content, "created_on": json_obj.get_creation_date()}
                 selected_file = lookup_cmd_file(file_data)
                 if selected_file:
                     #this is redundant; there an object with file data already.
