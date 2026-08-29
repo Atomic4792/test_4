@@ -87,7 +87,7 @@ def main():
                     data_source = JsonDataSource(file_name)
                     data_source.serialize_file(commands)
                 else:
-                    break 
+                    continue 
             elif main_options == 2:
                 file_data = {}
                 json_file_names = get_file_names()
