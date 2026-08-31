@@ -80,6 +80,7 @@ def main():
     while True:
         main_options = int(input("1. Add new cmd set 2.Perform actions with existing cmd set 3.exit: "))
         try:
+            os.system("cls")
             if main_options == 1:
                 is_command_added = add_cmd_ui()
                 if is_command_added:
