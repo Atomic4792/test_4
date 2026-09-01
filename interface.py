@@ -1,5 +1,6 @@
 from difflib import get_close_matches
 
+
 def add_cmd_ui() -> tuple | None:
     commands = {}
     cmd_counter = 0
@@ -15,37 +16,40 @@ def add_cmd_ui() -> tuple | None:
         return (file_name, commands)
     else:
         return None
-    
+
+
 def lookup_cmd_file(existing_files: dict) -> str | None:
-    print("\n\n")
-    print(f"{'File Name':<20}Created On")
-    for existing_file_name in existing_files:
-        print(f"{existing_file_name:<20}{existing_files[existing_file_name]['created_on']}")
-    print("\n\n")
-    file_name = input("Enter file name or 'wq' to go back: ").lower()
-    while file_name != 'wq':
-        print("\n")
+    print(f"\n\n{'File Name':<20}Created On")
+    for name, file_data in existing_files.items():
+        print(f"{name:<20}{file_data['created_on']}")
+
+    while (
+        file_name := input("\n\nEnter file name or 'wq' to go back: ").strip().lower()
+    ) != "wq":
         if not file_name:
-            file_name = input("Enter file name or 'wq' to go back: ").lower()
-        else:   
-            if file_name in existing_files:
-                for index, cmd in enumerate(existing_files[file_name]["file_content"]):
-                    print(f"{index +1}. {cmd}")
-                return file_name
-            file_name_suggestion = get_close_matches(file_name, list(existing_files.keys()), n=1)
-            if file_name_suggestion:
-                feedback = input(f"{file_name} not found, perhaps you mean {file_name_suggestion[0]}? y/n: ").lower()
-                if feedback == 'y':
-                    file_name = file_name_suggestion[0]
-                else:
-                    file_name = None
-            else:
-                print("File not found, please try again")
-                file_name = None
+            continue
+
+        if file_name not in existing_files:
+            matches = get_close_matches(file_name, existing_files.keys(), n=1)
+            if (
+                not matches
+                or input(
+                    f"{file_name} not found, perhaps you mean {matches[0]}? (y/n): "
+                ).lower()
+                != "y"
+            ):
+                print("File not found, please try again.")
+                continue
+            file_name = matches[0]
+
+        for index, cmd in enumerate(existing_files[file_name]["file_content"], start=1):
+            print(f"{index}. {cmd}")
+        return file_name
+
     return None
-                    
-    
-def command_ouput(cmd_result:list, selected_file: str) -> None:
+
+
+def command_ouput(cmd_result: list, selected_file: str) -> None:
     print("\n\n")
     print(f"Selected file: {selected_file}")
     print(f"Result: {cmd_result}")

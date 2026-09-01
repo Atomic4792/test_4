@@ -1,7 +1,13 @@
 import os
 from dotenv import load_dotenv
 from string import ascii_uppercase
-from utils import DataSource, TextDataSource,JsonDataSource, APIDataSource, get_file_names
+from utils import (
+    DataSource,
+    TextDataSource,
+    JsonDataSource,
+    APIDataSource,
+    get_file_names,
+)
 from interface import add_cmd_ui, lookup_cmd_file, command_ouput
 
 
@@ -42,7 +48,7 @@ def run(raw_data: DataSource) -> list:
     """
     commands = raw_data.parse_file()
     print_list = []
-    #characters = ascii_uppercase
+    # characters = ascii_uppercase
     data = {i: 0 for i in ascii_uppercase}
     row = 0
 
@@ -75,10 +81,13 @@ def run(raw_data: DataSource) -> list:
 
     return print_list
 
+
 def main():
     commands = {}
     while True:
-        main_options = int(input("1. Add new cmd set 2.Perform actions with existing cmd set 3.exit: "))
+        main_options = int(
+            input("1. Add new cmd set 2.Perform actions with existing cmd set 3.exit: ")
+        )
         try:
             os.system("cls")
             if main_options == 1:
@@ -88,18 +97,21 @@ def main():
                     data_source = JsonDataSource(file_name)
                     data_source.serialize_file(commands)
                 else:
-                    continue 
+                    continue
             elif main_options == 2:
                 file_data = {}
                 json_file_names = get_file_names()
                 for file_name in json_file_names:
                     json_obj = JsonDataSource(file_name)
                     file_content = json_obj.parse_file()
-                    file_data[file_name] = {"file_content" : file_content, "created_on": json_obj.get_creation_date()}
+                    file_data[file_name] = {
+                        "file_content": file_content,
+                        "created_on": json_obj.get_creation_date(),
+                    }
                 selected_file = lookup_cmd_file(file_data)
                 if selected_file:
-                    #this is redundant; there an object with file data already.
-                    #must refactor run()
+                    # this is redundant; there an object with file data already.
+                    # must refactor run()
                     result_file = JsonDataSource(selected_file)
                     result_set = run(result_file)
                     command_ouput(result_set, selected_file)
