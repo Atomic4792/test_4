@@ -4,11 +4,19 @@ from difflib import get_close_matches
 def add_cmd_ui() -> tuple | None:
     commands = {}
     cmd_counter = 0
-
+    print("""
+PRINT [value]: prints the value
+MOV [variable] [value]: assigns the value to the variable
+ADD [variable] [value]: adds the value to the variable
+SUB [variable] [value]: subtracts the value from the variable
+MUL [variable] [value]: multiplies the variable by the value
+[location]:: names a line of code, so it can be jumped to from elsewhere
+JUMP [location]: jumps to the location specified
+IF [condition] JUMP [location]: if the condition is true, jump to the location specified
+END: finish execution\n""")
     while (
         command := input("Enter command or type 'wq' to go back: ").strip().lower()
     ) != "wq":
-
         cmd_counter += 1
         commands[cmd_counter] = command
 
