@@ -4,13 +4,14 @@ from difflib import get_close_matches
 def add_cmd_ui() -> tuple | None:
     commands = {}
     cmd_counter = 0
-    while True:
-        command = input("Enter command or type 'wq' to go back: ")
-        if command.lower() != "wq":
-            cmd_counter += 1
-            commands[cmd_counter] = command
-        else:
-            break
+
+    while (
+        command := input("Enter command or type 'wq' to go back: ").strip().lower()
+    ) != "wq":
+
+        cmd_counter += 1
+        commands[cmd_counter] = command
+
     if commands:
         file_name = input("please enter file name to save commands: ")
         return (file_name, commands)
